@@ -5,6 +5,6 @@ interface IProps {
   children: React.ReactNode;
 }
 
-export default function TheContainer({ children }: IProps) {
+export default function Container({ children }: IProps) {
   return <StyledContainer>{children}</StyledContainer>;
 }

@@ -1,14 +1,14 @@
 import React from "react";
-import TheContainer from "../UI/TheContainer";
+import TheContainer from "../UI/Container";
 import { StyledHeader, StyledHeaderInner } from "./styles";
-import TheLogo from "../TheLogo";
+import Logo from "../Logo";
 
-export default function TheHeader() {
+export default function Header() {
   return (
     <StyledHeader>
       <TheContainer>
         <StyledHeaderInner>
-          <TheLogo />
+          <Logo />
           <div>Made by Whoamizy</div>
         </StyledHeaderInner>
       </TheContainer>

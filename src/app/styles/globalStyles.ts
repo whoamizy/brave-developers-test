@@ -15,6 +15,15 @@ export const GlobalStyle = createGlobalStyle`
     color: #868AA4;
   }
 
+  .page {
+    transition: 0.5s;
+    opacity: 0;
+  }
+
+  .fadeIn {
+    opacity: 1;
+  }
+
   @media (max-width: 768px){
     body {
       font-size: 14px;

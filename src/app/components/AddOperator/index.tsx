@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import TheInput from "../UI/TheInput";
-import TheButton from "../UI/TheButton";
+import Input from "../UI/Input";
+import Button from "../UI/Button";
 import { useGlobalContext } from "@/app/context/store";
 import { StyledAddForm, StyledAddTitle } from "./styles";
 
@@ -19,13 +19,13 @@ export default function AddOperator() {
     <>
       <StyledAddTitle>Add an operator</StyledAddTitle>
       <StyledAddForm onSubmit={(e) => add(e)}>
-        <TheInput
+        <Input
           type="text"
           placeholder="Enter the operator name"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        <TheButton>Add</TheButton>
+        <Button>Add</Button>
       </StyledAddForm>
     </>
   );

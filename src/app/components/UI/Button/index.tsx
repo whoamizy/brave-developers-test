@@ -7,7 +7,7 @@ interface IProps {
   disabled?: boolean;
 }
 
-export default function TheButton({ children, onClick, disabled }: IProps) {
+export default function Button({ children, onClick, disabled }: IProps) {
   return (
     <StyledButton onClick={onClick} disabled={disabled}>
       {children}

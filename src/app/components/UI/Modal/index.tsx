@@ -7,7 +7,7 @@ interface IProps {
   children: React.ReactNode;
 }
 
-export default function TheModal({ show, modalHide, children }: IProps) {
+export default function Modal({ show, modalHide, children }: IProps) {
   if (!show) return null;
 
   return (

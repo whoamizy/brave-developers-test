@@ -5,17 +5,17 @@ import MEGAFON from "@/app/assets/images/megafon.svg";
 
 export const operators: IOperator[] = [
   {
-    id: 0,
+    id: "0",
     name: "МТС",
     imageUrl: MTC,
   },
   {
-    id: 1,
+    id: "1",
     name: "Билайн",
     imageUrl: BILAIN,
   },
   {
-    id: 2,
+    id: "2",
     name: "Мегафон",
     imageUrl: MEGAFON,
   },

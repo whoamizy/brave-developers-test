@@ -1,12 +1,11 @@
 "use client";
 import { styled } from "styled-components";
-import TheContainer from "./components/UI/TheContainer";
-import TheTitle from "./components/UI/TheTitle";
-import TheButton from "./components/UI/TheButton";
+import Container from "./components/UI/Container";
+import Button from "./components/UI/Button";
 import OperatorsList from "./components/OperatorsList";
 import { useGlobalContext } from "./context/store";
-import TheModal from "./components/UI/TheModal";
-import { useState } from "react";
+import Modal from "./components/UI/Modal";
+import { useEffect, useState } from "react";
 import AddOperator from "./components/AddOperator";
 
 export default function Home() {
@@ -22,23 +21,27 @@ export default function Home() {
     setIsShow(false);
   };
 
+  const [transitionStage, setTransitionStage] = useState("fadeOut");
+
+  useEffect(() => setTransitionStage("fadeIn"), []);
+
   return (
-    <main>
-      <StyledHome>
-        <TheContainer>
+    <>
+      <StyledHome className={`page ${transitionStage}`}>
+        <Container>
           <div className="home__inner">
             <StyledHomeTop>
-              <TheTitle>Mobile Operators</TheTitle>
-              <TheButton onClick={showModal}>Add New Operator</TheButton>
+              <StyledHomeTitle>Mobile Operators</StyledHomeTitle>
+              <Button onClick={showModal}>Add New Operator</Button>
             </StyledHomeTop>
             <OperatorsList operators={operatorsList} />
           </div>
-        </TheContainer>
+        </Container>
       </StyledHome>
-      <TheModal show={isShow} modalHide={hideModal}>
+      <Modal show={isShow} modalHide={hideModal}>
         <AddOperator />
-      </TheModal>
-    </main>
+      </Modal>
+    </>
   );
 }
 
@@ -62,5 +65,19 @@ const StyledHomeTop = styled.div`
   }
   @media (max-width: 480px) {
     flex-direction: column;
+  }
+`;
+
+const StyledHomeTitle = styled.h1`
+  font-weight: 700;
+  font-size: 36px;
+  color: #fff;
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 24px;
   }
 `;
