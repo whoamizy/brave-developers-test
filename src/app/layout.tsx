@@ -1,6 +1,5 @@
 "use client";
 import { Ubuntu } from "next/font/google";
-import { Metadata } from "next";
 import Header from "./components/Header";
 import { GlobalStyle } from "./styles/globalStyles";
 import "./styles/nullstyle.css";
@@ -11,10 +10,6 @@ const ubuntu = Ubuntu({
   subsets: ["latin"],
   display: "swap",
 });
-
-export const metadata: Metadata = {
-  title: "ReactPay",
-};
 
 export default function RootLayout({
   children,
