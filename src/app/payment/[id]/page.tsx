@@ -23,12 +23,16 @@ export default function Page({ params }: IProps) {
   const [number, setNumber] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [transitionStage, setTransitionStage] = useState("fadeOut");
+
+  useEffect(() => setTransitionStage("fadeIn"), []);
 
   const operator = operatorsList.find((op) => op.id === id);
 
   const goBack = () => {
     router.back();
   };
+
   const pay = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!number.length || !amount) {
@@ -50,10 +54,6 @@ export default function Page({ params }: IProps) {
       }
     }
   };
-
-  const [transitionStage, setTransitionStage] = useState("fadeOut");
-
-  useEffect(() => setTransitionStage("fadeIn"), []);
 
   return (
     <StyledPayment className={`page ${transitionStage}`}>
@@ -113,13 +113,6 @@ const StyledPaymentStatus = styled.div`
   font-weight: 500;
   font-size: 32px;
   transition: 0.3s;
-
-  &.fadeIn {
-    opacity: 1;
-  }
-  &.fadeOut {
-    opacity: 0;
-  }
 
   @media (max-width: 768px) {
     font-size: 28px;

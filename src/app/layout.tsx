@@ -1,3 +1,4 @@
+"use client";
 import { Ubuntu } from "next/font/google";
 import { Metadata } from "next";
 import Header from "./components/Header";

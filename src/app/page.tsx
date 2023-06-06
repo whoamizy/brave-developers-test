@@ -11,6 +11,9 @@ import AddOperator from "./components/AddOperator";
 export default function Home() {
   const { operatorsList } = useGlobalContext();
   const [isShow, setIsShow] = useState<boolean>(false);
+  const [transitionStage, setTransitionStage] = useState("fadeOut");
+
+  useEffect(() => setTransitionStage("fadeIn"), []);
 
   const showModal = () => {
     setIsShow(true);
@@ -20,10 +23,6 @@ export default function Home() {
     e.stopPropagation();
     setIsShow(false);
   };
-
-  const [transitionStage, setTransitionStage] = useState("fadeOut");
-
-  useEffect(() => setTransitionStage("fadeIn"), []);
 
   return (
     <>
