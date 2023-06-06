@@ -1,4 +1,3 @@
-"use client";
 import { Ubuntu } from "next/font/google";
 import { Metadata } from "next";
 import Header from "./components/Header";
@@ -26,9 +25,7 @@ export default function RootLayout({
       <GlobalStyle />
       <body>
         <Header />
-        <GlobalContextProvider>
-          <main>{children}</main>
-        </GlobalContextProvider>
+        <GlobalContextProvider>{children}</GlobalContextProvider>
       </body>
     </html>
   );
