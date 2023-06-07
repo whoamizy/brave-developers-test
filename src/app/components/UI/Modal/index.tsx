@@ -3,7 +3,7 @@ import { StyledModalContent, StyledModalOverlay } from "./styles";
 
 interface IProps {
   show: boolean;
-  modalHide: (e: React.MouseEvent) => void;
+  modalHide: () => void;
   children: React.ReactNode;
 }
 

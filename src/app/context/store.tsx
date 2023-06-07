@@ -15,12 +15,16 @@ import { nanoid } from "nanoid";
 interface ContextProps {
   operatorsList: IOperator[];
   setOperatorsList: Dispatch<SetStateAction<IOperator[]>>;
+  isShow: boolean;
+  setIsShow: Dispatch<SetStateAction<boolean>>;
   addNewOperator: (name: string) => void;
 }
 
 const GlobalContext = createContext<ContextProps>({
   operatorsList: operators,
   setOperatorsList: (): IOperator[] => [],
+  isShow: false,
+  setIsShow: (): boolean => false,
   addNewOperator: (): string => "",
 });
 
@@ -30,6 +34,7 @@ export const GlobalContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [operatorsList, setOperatorsList] = useState<IOperator[]>(operators);
+  const [isShow, setIsShow] = useState<boolean>(false);
 
   const addNewOperator = (name: string) => {
     const newOperator: IOperator = {
@@ -47,6 +52,7 @@ export const GlobalContextProvider = ({
     }
 
     setOperatorsList([...operatorsList, newOperator]);
+    setIsShow(false);
     console.log("Added");
   };
 
@@ -55,6 +61,8 @@ export const GlobalContextProvider = ({
       value={{
         operatorsList,
         setOperatorsList,
+        isShow,
+        setIsShow,
         addNewOperator,
       }}
     >

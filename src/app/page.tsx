@@ -9,8 +9,7 @@ import { useEffect, useState } from "react";
 import AddOperator from "./components/AddOperator";
 
 export default function Home() {
-  const { operatorsList } = useGlobalContext();
-  const [isShow, setIsShow] = useState<boolean>(false);
+  const { operatorsList, isShow, setIsShow } = useGlobalContext();
   const [transitionStage, setTransitionStage] = useState("fadeOut");
 
   useEffect(() => setTransitionStage("fadeIn"), []);
@@ -19,8 +18,7 @@ export default function Home() {
     setIsShow(true);
   };
 
-  const hideModal = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const hideModal = () => {
     setIsShow(false);
   };
 
