@@ -10,6 +10,7 @@ import {
 import { IOperator } from "../types/OperatorType";
 import { operators } from "../constants/operators";
 import NotFound from "../assets/images/not-found.svg";
+import { nanoid } from "nanoid";
 
 interface ContextProps {
   operatorsList: IOperator[];
@@ -32,14 +33,15 @@ export const GlobalContextProvider = ({
 
   const addNewOperator = (name: string) => {
     const newOperator: IOperator = {
-      id: name.trim(),
+      id: nanoid(),
       name: name.trim(),
       imageUrl: NotFound,
     };
+    console.log(newOperator);
 
     if (
       !newOperator.name ||
-      operatorsList.find((op) => op.name === newOperator.name)
+      operatorsList.find((op) => op.id === newOperator.id)
     ) {
       return;
     }

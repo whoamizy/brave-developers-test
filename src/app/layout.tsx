@@ -7,7 +7,7 @@ import { GlobalContextProvider } from "./context/store";
 
 const ubuntu = Ubuntu({
   weight: ["400", "500", "700"],
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic"],
   display: "swap",
 });
 
@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={ubuntu.className}>
+    <html lang="ru" className={ubuntu.className}>
       <GlobalStyle />
       <body>
         <Header />
