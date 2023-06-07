@@ -42,11 +42,10 @@ export const GlobalContextProvider = ({
       name: name.trim(),
       imageUrl: NotFound,
     };
-    console.log(newOperator);
 
     if (
       !newOperator.name ||
-      operatorsList.find((op) => op.id === newOperator.id)
+      operatorsList.find((op) => op.name === newOperator.name)
     ) {
       return;
     }
