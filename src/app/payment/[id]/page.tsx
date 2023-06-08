@@ -5,25 +5,24 @@ import Container from "@/app/components/UI/Container";
 import Input from "@/app/components/UI/Input";
 import { useGlobalContext } from "@/app/context/store";
 import { getRandom } from "@/app/utils/getRandom";
+import { NextPage } from "next";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { styled } from "styled-components";
+import styled, { css } from "styled-components";
 
-interface IProps {
-  params: {
-    id: string | number;
-  };
-}
+type TProps = {
+  id: string | number;
+};
 
-export default function Page({ params }: IProps) {
+export const Page: NextPage<{ params: TProps }> = ({ params }) => {
   const id = params.id;
   const router = useRouter();
   const { operatorsList } = useGlobalContext();
-  const [status, setStatus] = useState<string>("");
-  const [number, setNumber] = useState<string>("");
-  const [amount, setAmount] = useState<string>("");
-  const [submitting, setSubmitting] = useState<boolean>(false);
-  const [transitionStage, setTransitionStage] = useState("fadeOut");
+  const [status, setStatus] = useState("");
+  const [number, setNumber] = useState("");
+  const [amount, setAmount] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [transitionStage, setTransitionStage] = useState("");
 
   useEffect(() => setTransitionStage("fadeIn"), []);
 
@@ -35,9 +34,10 @@ export default function Page({ params }: IProps) {
 
   const pay = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!number.length || !amount) {
+    if (number.replace(/[+()_-\s]/g, "").length < 11 || !amount) {
       return;
     }
+
     if (!submitting) {
       setSubmitting(true);
       setTimeout(() => {
@@ -56,42 +56,48 @@ export default function Page({ params }: IProps) {
   };
 
   return (
-    <StyledPayment className={`page ${transitionStage}`}>
+    <StyledPayment $transitionStage={transitionStage}>
       <Container>
-        <div className="payment__inner">
-          <StyledPaymentTop>
-            <Button onClick={() => goBack()}>Back</Button>
-            {status && <StyledPaymentStatus>{status}</StyledPaymentStatus>}
-          </StyledPaymentTop>
-          <div className="payment__content">
-            <StyledPaymentForm onSubmit={(e) => pay(e)}>
-              <OperatorsItem operator={operator!} />
-              <Input
-                type="tel"
-                value={number}
-                onChange={(e) => setNumber(e.target.value)}
-                placeholder="+7(___)___-__-__"
-              />
-              <Input
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="Enter the payment amount"
-                min="1"
-                max="1000"
-              />
-              <StyledPaymentTip>min 1, max 1000</StyledPaymentTip>
-              <Button disabled={submitting}>Pay</Button>
-            </StyledPaymentForm>
-          </div>
-        </div>
+        <StyledPaymentTop>
+          <Button onClick={() => goBack()}>Back</Button>
+          {status && <StyledPaymentStatus>{status}</StyledPaymentStatus>}
+        </StyledPaymentTop>
+        <StyledPaymentForm onSubmit={(e) => pay(e)}>
+          <OperatorsItem operator={operator!} />
+          <Input
+            type="tel"
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
+            placeholder="+7(___)___-__-__"
+          />
+          <Input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="Enter the payment amount"
+            min="1"
+            max="1000"
+          />
+          <StyledPaymentTip>min 1, max 1000</StyledPaymentTip>
+          <Button disabled={submitting}>Pay</Button>
+        </StyledPaymentForm>
       </Container>
     </StyledPayment>
   );
-}
+};
 
-const StyledPayment = styled.div`
+export default Page;
+
+const StyledPayment = styled.div<{ $transitionStage?: string }>`
   padding: 40px 0;
+  transition: 0.5s;
+  opacity: 0;
+
+  ${(props) =>
+    props.$transitionStage === "fadeIn" &&
+    css`
+      opacity: 1;
+    `};
 
   @media (max-width: 768px) {
     padding: 20px 0;

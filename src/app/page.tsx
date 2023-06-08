@@ -1,5 +1,4 @@
 "use client";
-import { styled } from "styled-components";
 import Container from "./components/UI/Container";
 import Button from "./components/UI/Button";
 import OperatorsList from "./components/OperatorsList";
@@ -7,10 +6,12 @@ import { useGlobalContext } from "./context/store";
 import Modal from "./components/UI/Modal";
 import { useEffect, useState } from "react";
 import AddOperator from "./components/AddOperator";
+import styled, { css } from "styled-components";
+import { NextPage } from "next";
 
-export default function Home() {
+const Home: NextPage = () => {
   const { operatorsList, isShow, setIsShow } = useGlobalContext();
-  const [transitionStage, setTransitionStage] = useState("fadeOut");
+  const [transitionStage, setTransitionStage] = useState("");
 
   useEffect(() => setTransitionStage("fadeIn"), []);
 
@@ -24,15 +25,13 @@ export default function Home() {
 
   return (
     <>
-      <StyledHome className={`page ${transitionStage}`}>
+      <StyledHome $transitionStage={transitionStage}>
         <Container>
-          <div className="home__inner">
-            <StyledHomeTop>
-              <StyledHomeTitle>Mobile Operators</StyledHomeTitle>
-              <Button onClick={showModal}>Add New Operator</Button>
-            </StyledHomeTop>
-            <OperatorsList operators={operatorsList} />
-          </div>
+          <StyledHomeTop>
+            <StyledHomeTitle>Mobile Operators</StyledHomeTitle>
+            <Button onClick={showModal}>Add New Operator</Button>
+          </StyledHomeTop>
+          <OperatorsList operators={operatorsList} />
         </Container>
       </StyledHome>
       <Modal show={isShow} modalHide={hideModal}>
@@ -40,10 +39,20 @@ export default function Home() {
       </Modal>
     </>
   );
-}
+};
 
-const StyledHome = styled.div`
+export default Home;
+
+const StyledHome = styled.div<{ $transitionStage?: string }>`
   padding: 40px 0;
+  transition: 0.5s;
+  opacity: 0;
+
+  ${(props) =>
+    props.$transitionStage === "fadeIn" &&
+    css`
+      opacity: 1;
+    `};
 
   @media (max-width: 768px) {
     padding: 20px 0;

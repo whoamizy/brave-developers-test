@@ -20,13 +20,15 @@ interface ContextProps {
   addNewOperator: (name: string) => void;
 }
 
-const GlobalContext = createContext<ContextProps>({
-  operatorsList: operators,
-  setOperatorsList: (): IOperator[] => [],
+const defaultValues: ContextProps = {
+  operatorsList: [],
+  setOperatorsList: () => undefined,
   isShow: false,
-  setIsShow: (): boolean => false,
-  addNewOperator: (): string => "",
-});
+  setIsShow: () => undefined,
+  addNewOperator: () => undefined,
+};
+
+const GlobalContext = createContext<ContextProps>(defaultValues);
 
 export const GlobalContextProvider = ({
   children,
@@ -50,7 +52,7 @@ export const GlobalContextProvider = ({
       return;
     }
 
-    setOperatorsList([...operatorsList, newOperator]);
+    setOperatorsList((operators) => [...operators, newOperator]);
     setIsShow(false);
     console.log("Added");
   };
