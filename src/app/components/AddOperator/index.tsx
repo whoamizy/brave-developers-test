@@ -20,6 +20,7 @@ export default function AddOperator() {
       <StyledAddTitle>Add an operator</StyledAddTitle>
       <StyledAddForm onSubmit={(e) => add(e)}>
         <Input
+          required
           type="text"
           placeholder="Enter the operator name"
           value={name}

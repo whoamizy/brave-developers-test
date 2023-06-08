@@ -9,6 +9,7 @@ interface IProps {
   placeholder?: string;
   min?: string;
   max?: string;
+  required?: boolean;
 }
 
 export default function Input({
@@ -18,11 +19,13 @@ export default function Input({
   placeholder,
   min,
   max,
+  required,
 }: IProps) {
   function pickInput() {
     if (type === "tel") {
       return (
         <InputMask
+          required={required}
           type={type}
           value={value}
           onChange={onChange}
@@ -33,6 +36,7 @@ export default function Input({
     } else if (type === "number") {
       return (
         <input
+          required={required}
           type={type}
           value={value}
           onChange={onChange}
@@ -44,6 +48,7 @@ export default function Input({
     } else {
       return (
         <input
+          required={required}
           type={type}
           value={value}
           onChange={onChange}

@@ -11,10 +11,10 @@ import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 
 type TProps = {
-  id: string | number;
+  id?: string | number;
 };
 
-export const Page: NextPage<{ params: TProps }> = ({ params }) => {
+const Page: NextPage<{ params: TProps }> = ({ params }) => {
   const id = params.id;
   const router = useRouter();
   const { operatorsList } = useGlobalContext();
@@ -65,12 +65,14 @@ export const Page: NextPage<{ params: TProps }> = ({ params }) => {
         <StyledPaymentForm onSubmit={(e) => pay(e)}>
           <OperatorsItem operator={operator!} />
           <Input
+            required
             type="tel"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
             placeholder="+7(___)___-__-__"
           />
           <Input
+            required
             type="number"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
