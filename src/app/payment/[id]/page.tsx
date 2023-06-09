@@ -37,10 +37,10 @@ const Page: NextPage<{ params: TProps }> = ({ params }) => {
     message: ResponseMessage.Failure,
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [isTransitioned, setIsTransitioned] = useState(false);
+  const [isLoad, setIsLoad] = useState(false);
 
   useEffect(() => {
-    setIsTransitioned(true);
+    setIsLoad(true);
   }, []);
 
   const operator = operatorsList.find((op) => op.id === id);
@@ -87,7 +87,7 @@ const Page: NextPage<{ params: TProps }> = ({ params }) => {
   }, [paymentResponse.isSuccess]);
 
   return (
-    <StyledPayment $transitionStage={isTransitioned}>
+    <StyledPayment $transitionStage={isLoad}>
       <Container>
         <StyledPaymentTop>
           <Button onClick={goBack}>Back</Button>

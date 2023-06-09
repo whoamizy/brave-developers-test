@@ -18,9 +18,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru" className={ubuntu.className}>
-      <GlobalStyle />
       <body>
         <Header />
+        <GlobalStyle />
         <GlobalContextProvider>{children}</GlobalContextProvider>
       </body>
     </html>

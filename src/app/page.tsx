@@ -11,10 +11,10 @@ import { useEffect, useState } from "react";
 
 const Home: NextPage = () => {
   const { operatorsList, isShow, setIsShow } = useGlobalContext();
-  const [isTransitioned, setIsTransitioned] = useState(false);
+  const [isLoad, setIsLoad] = useState(false);
 
   useEffect(() => {
-    setIsTransitioned(true);
+    setIsLoad(true);
   }, []);
 
   const showModal = () => {
@@ -26,20 +26,18 @@ const Home: NextPage = () => {
   };
 
   return (
-    <>
-      <StyledHome $transitionStage={isTransitioned}>
-        <Container>
-          <StyledHomeTop>
-            <StyledHomeTitle>Mobile Operators</StyledHomeTitle>
-            <Button onClick={showModal}>Add New Operator</Button>
-          </StyledHomeTop>
-          <OperatorsList operators={operatorsList} />
-        </Container>
-      </StyledHome>
+    <StyledHome $transitionStage={isLoad}>
+      <Container>
+        <StyledHomeTop>
+          <StyledHomeTitle>Mobile Operators</StyledHomeTitle>
+          <Button onClick={showModal}>Add New Operator</Button>
+        </StyledHomeTop>
+        <OperatorsList operators={operatorsList} />
+      </Container>
       <Modal show={isShow} modalHide={hideModal}>
         <AddOperator />
       </Modal>
-    </>
+    </StyledHome>
   );
 };
 
