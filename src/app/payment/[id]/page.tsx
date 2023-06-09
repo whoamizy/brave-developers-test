@@ -1,78 +1,122 @@
 "use client";
+import { fetchPaymentResponse } from "@/app/api";
 import OperatorsItem from "@/app/components/OperatorsItem";
 import Button from "@/app/components/UI/Button";
 import Container from "@/app/components/UI/Container";
 import Input from "@/app/components/UI/Input";
 import { useGlobalContext } from "@/app/context/store";
-import { getRandom } from "@/app/utils/getRandom";
+import { IResponse, ResponseMessage } from "@/app/types/ResponseType";
 import { NextPage } from "next";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import styled, { css } from "styled-components";
+import {
+  StyledPayment,
+  StyledPaymentError,
+  StyledPaymentForm,
+  StyledPaymentStatus,
+  StyledPaymentSuccess,
+  StyledPaymentTip,
+  StyledPaymentTop,
+} from "./styles";
 
 type TProps = {
-  id?: string | number;
+  id: string | number;
 };
 
 const Page: NextPage<{ params: TProps }> = ({ params }) => {
   const id = params.id;
   const router = useRouter();
   const { operatorsList } = useGlobalContext();
-  const [status, setStatus] = useState("");
   const [number, setNumber] = useState("");
+  const [numberError, setNumberError] = useState(false);
   const [amount, setAmount] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [transitionStage, setTransitionStage] = useState("");
+  const [amountError, setAmountError] = useState(false);
+  const [paymentResponse, setPaymentResponse] = useState<IResponse>({
+    fetched: false,
+    isSuccess: false,
+    message: ResponseMessage.Failure,
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [isTransitioned, setIsTransitioned] = useState(false);
 
-  useEffect(() => setTransitionStage("fadeIn"), []);
+  useEffect(() => {
+    setIsTransitioned(true);
+  }, []);
 
   const operator = operatorsList.find((op) => op.id === id);
 
-  const goBack = () => {
+  function goHome() {
+    router.push("/");
+  }
+
+  function goBack() {
     router.back();
-  };
+  }
 
-  const pay = (e: React.FormEvent<HTMLFormElement>) => {
+  const pay = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (number.replace(/[+()_-\s]/g, "").length < 11 || !amount) {
+
+    if (number.replace(/[^\d]/g, "").length !== 11) {
+      setNumberError(true);
       return;
+    } else {
+      setNumberError(false);
+    }
+    if (!amount.length) {
+      setAmountError(true);
+      return;
+    } else {
+      setAmountError(false);
     }
 
-    if (!submitting) {
-      setSubmitting(true);
-      setTimeout(() => {
-        setSubmitting(false);
-        setStatus("");
-      }, 3000);
-      if (getRandom()) {
-        setStatus("✅ Success");
-        setTimeout(() => {
-          router.push("/");
-        }, 3000);
-      } else {
-        setStatus("❌ Error");
-      }
+    try {
+      setIsLoading(true);
+      await fetchPaymentResponse().then((data) => setPaymentResponse(data));
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
     }
   };
+
+  useEffect(() => {
+    if (paymentResponse.isSuccess) {
+      setTimeout(() => {
+        goHome();
+      }, 3000);
+    }
+  }, [paymentResponse.isSuccess]);
 
   return (
-    <StyledPayment $transitionStage={transitionStage}>
+    <StyledPayment $transitionStage={isTransitioned}>
       <Container>
         <StyledPaymentTop>
-          <Button onClick={() => goBack()}>Back</Button>
-          {status && <StyledPaymentStatus>{status}</StyledPaymentStatus>}
+          <Button onClick={goBack}>Back</Button>
+          {paymentResponse.fetched && (
+            <StyledPaymentStatus>{paymentResponse.message}</StyledPaymentStatus>
+          )}
         </StyledPaymentTop>
-        <StyledPaymentForm onSubmit={(e) => pay(e)}>
+        {paymentResponse.isSuccess && (
+          <StyledPaymentSuccess>
+            🎉 Successful! 🎉
+            <br />
+            In a couple of seconds it will take you to the home page
+          </StyledPaymentSuccess>
+        )}
+        <StyledPaymentForm onSubmit={pay}>
           <OperatorsItem operator={operator!} />
+          {numberError && (
+            <StyledPaymentError>Incorrect number</StyledPaymentError>
+          )}
           <Input
-            required
             type="tel"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
             placeholder="+7(___)___-__-__"
           />
+          {amountError && (
+            <StyledPaymentError>Required field</StyledPaymentError>
+          )}
           <Input
-            required
             type="number"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
@@ -81,7 +125,7 @@ const Page: NextPage<{ params: TProps }> = ({ params }) => {
             max="1000"
           />
           <StyledPaymentTip>min 1, max 1000</StyledPaymentTip>
-          <Button disabled={submitting}>Pay</Button>
+          <Button disabled={isLoading}>{isLoading ? "Loading" : "Pay"}</Button>
         </StyledPaymentForm>
       </Container>
     </StyledPayment>
@@ -89,61 +133,3 @@ const Page: NextPage<{ params: TProps }> = ({ params }) => {
 };
 
 export default Page;
-
-const StyledPayment = styled.div<{ $transitionStage?: string }>`
-  padding: 40px 0;
-  transition: 0.5s;
-  opacity: 0;
-
-  ${(props) =>
-    props.$transitionStage === "fadeIn" &&
-    css`
-      opacity: 1;
-    `};
-
-  @media (max-width: 768px) {
-    padding: 20px 0;
-  }
-`;
-
-const StyledPaymentTop = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 40px;
-
-  @media (max-width: 768px) {
-    margin-bottom: 20px;
-  }
-`;
-
-const StyledPaymentStatus = styled.div`
-  font-weight: 500;
-  font-size: 32px;
-  transition: 0.3s;
-
-  @media (max-width: 768px) {
-    font-size: 28px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 24px;
-  }
-`;
-
-const StyledPaymentForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 500px;
-  margin: 0 auto;
-`;
-
-const StyledPaymentTip = styled.div`
-  font-size: 14px;
-  margin-top: -10px;
-
-  @media (max-width: 480px) {
-    font-size: 12px;
-  }
-`;

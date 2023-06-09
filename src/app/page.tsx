@@ -4,16 +4,18 @@ import Button from "./components/UI/Button";
 import OperatorsList from "./components/OperatorsList";
 import { useGlobalContext } from "./context/store";
 import Modal from "./components/UI/Modal";
-import { useEffect, useState } from "react";
 import AddOperator from "./components/AddOperator";
 import styled, { css } from "styled-components";
 import { NextPage } from "next";
+import { useEffect, useState } from "react";
 
 const Home: NextPage = () => {
   const { operatorsList, isShow, setIsShow } = useGlobalContext();
-  const [transitionStage, setTransitionStage] = useState("");
+  const [isTransitioned, setIsTransitioned] = useState(false);
 
-  useEffect(() => setTransitionStage("fadeIn"), []);
+  useEffect(() => {
+    setIsTransitioned(true);
+  }, []);
 
   const showModal = () => {
     setIsShow(true);
@@ -25,7 +27,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <StyledHome $transitionStage={transitionStage}>
+      <StyledHome $transitionStage={isTransitioned}>
         <Container>
           <StyledHomeTop>
             <StyledHomeTitle>Mobile Operators</StyledHomeTitle>
@@ -43,13 +45,13 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const StyledHome = styled.div<{ $transitionStage?: string }>`
+const StyledHome = styled.div<{ $transitionStage?: boolean }>`
   padding: 40px 0;
   transition: 0.5s;
   opacity: 0;
 
   ${(props) =>
-    props.$transitionStage === "fadeIn" &&
+    props.$transitionStage &&
     css`
       opacity: 1;
     `};

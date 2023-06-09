@@ -26,3 +26,14 @@ export const StyledAddTitle = styled.h2`
     font-size: 24px;
   }
 `;
+
+export const StyledAddError = styled.div`
+  color: #f5685a;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
+`;

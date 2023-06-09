@@ -36,7 +36,7 @@ export const GlobalContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [operatorsList, setOperatorsList] = useState<IOperator[]>(operators);
-  const [isShow, setIsShow] = useState<boolean>(false);
+  const [isShow, setIsShow] = useState(false);
 
   const addNewOperator = (name: string) => {
     const newOperator: IOperator = {
@@ -45,16 +45,8 @@ export const GlobalContextProvider = ({
       imageUrl: NotFound,
     };
 
-    if (
-      !newOperator.name ||
-      operatorsList.find((op) => op.name === newOperator.name)
-    ) {
-      return;
-    }
-
     setOperatorsList((operators) => [...operators, newOperator]);
     setIsShow(false);
-    console.log("Added");
   };
 
   return (

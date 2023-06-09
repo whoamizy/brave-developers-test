@@ -1,4 +1,4 @@
-export const useSliceName = (name: string) => {
+export const formatName = (name: string) => {
   if (name.length > 12) {
     name = name.slice(0, 11) + "…";
   }
