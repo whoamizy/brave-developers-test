@@ -52,6 +52,8 @@ const Page: NextPage<{ params: TProps }> = ({ params }) => {
       setIsLoading(true);
       await fetchPaymentResponse().then((data) => setPaymentResponse(data));
       setIsLoading(false);
+      setNumber("");
+      setAmount("");
     } catch (err) {
       console.error(err);
     }
