@@ -5,17 +5,12 @@ import OperatorsList from "./components/OperatorsList";
 import { useGlobalContext } from "./context/store";
 import Modal from "./components/UI/Modal";
 import AddOperator from "./components/AddOperator";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { fadeIn } from "./styles/animations";
 
 const Home: NextPage = () => {
   const { operatorsList, isShow, setIsShow } = useGlobalContext();
-  const [isPageLoad, setIsPageLoad] = useState(false);
-
-  useEffect(() => {
-    setIsPageLoad(true);
-  }, []);
 
   const showModal = () => {
     setIsShow(true);
@@ -26,7 +21,7 @@ const Home: NextPage = () => {
   };
 
   return (
-    <StyledHome $transition={isPageLoad}>
+    <StyledHome>
       <Container>
         <StyledHomeTop>
           <StyledHomeTitle>Mobile Operators</StyledHomeTitle>
@@ -43,16 +38,9 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const StyledHome = styled.div<{ $transition?: boolean }>`
+const StyledHome = styled.div`
   padding: 40px 0;
-  opacity: 0;
-  transition: 0.5s;
-
-  ${(props) =>
-    props.$transition &&
-    css`
-      opacity: 1;
-    `};
+  animation: ${fadeIn} 0.5s linear;
 
   @media (max-width: 768px) {
     padding: 20px 0;

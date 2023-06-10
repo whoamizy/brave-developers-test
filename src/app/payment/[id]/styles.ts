@@ -1,17 +1,11 @@
 "use client";
 
-import styled, { css } from "styled-components";
+import { fadeIn } from "@/app/styles/animations";
+import styled from "styled-components";
 
-export const StyledPayment = styled.div<{ $transition?: boolean }>`
+export const StyledPayment = styled.div`
   padding: 40px 0;
-  opacity: 0;
-  transition: 0.5s;
-
-  ${(props) =>
-    props.$transition &&
-    css`
-      opacity: 1;
-    `};
+  animation: ${fadeIn} 0.5s linear;
 
   @media (max-width: 768px) {
     padding: 20px 0;
