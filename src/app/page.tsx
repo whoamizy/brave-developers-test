@@ -11,10 +11,10 @@ import { useEffect, useState } from "react";
 
 const Home: NextPage = () => {
   const { operatorsList, isShow, setIsShow } = useGlobalContext();
-  const [isLoad, setIsLoad] = useState(false);
+  const [isPageLoad, setIsPageLoad] = useState(false);
 
   useEffect(() => {
-    setIsLoad(true);
+    setIsPageLoad(true);
   }, []);
 
   const showModal = () => {
@@ -26,7 +26,7 @@ const Home: NextPage = () => {
   };
 
   return (
-    <StyledHome $transitionStage={isLoad}>
+    <StyledHome $transition={isPageLoad}>
       <Container>
         <StyledHomeTop>
           <StyledHomeTitle>Mobile Operators</StyledHomeTitle>
@@ -43,13 +43,13 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const StyledHome = styled.div<{ $transitionStage?: boolean }>`
+const StyledHome = styled.div<{ $transition?: boolean }>`
   padding: 40px 0;
-  transition: 0.5s;
   opacity: 0;
+  transition: 0.5s;
 
   ${(props) =>
-    props.$transitionStage &&
+    props.$transition &&
     css`
       opacity: 1;
     `};

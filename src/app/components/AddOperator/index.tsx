@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../UI/Input";
 import Button from "../UI/Button";
 import { useGlobalContext } from "@/app/context/store";
@@ -7,39 +7,39 @@ import { StyledAddForm, StyledAddError, StyledAddTitle } from "./styles";
 export default function AddOperator() {
   const { addNewOperator, operatorsList } = useGlobalContext();
   const [name, setName] = useState("");
-  const [error, setError] = useState({
-    isIncorrect: false,
-    message: "",
-  });
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const add = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!name.length) {
-      setError({
-        isIncorrect: true,
-        message: "Required field",
-      });
+
+    if (
+      operatorsList.find((op) => op.name.toLowerCase() === name.toLowerCase())
+    ) {
+      setErrorMessage("Such an operator is already added");
+      setIsDisabled(true);
+      setName("");
       return;
     }
-    if (operatorsList.find((op) => op.name === name)) {
-      setError({
-        isIncorrect: true,
-        message: "An operator with this name has already been added",
-      });
-      return;
-    }
+
+    setIsDisabled(false);
     addNewOperator(name);
-    setError({
-      isIncorrect: false,
-      message: "",
-    });
     setName("");
   };
+
+  useEffect(() => {
+    if (!name.length) {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+      setErrorMessage("");
+    }
+  }, [name]);
 
   return (
     <>
       <StyledAddTitle>Add an operator</StyledAddTitle>
-      {error.isIncorrect && <StyledAddError>{error.message}</StyledAddError>}
+      {errorMessage && <StyledAddError>{errorMessage}</StyledAddError>}
       <StyledAddForm onSubmit={add}>
         <Input
           type="text"
@@ -47,7 +47,7 @@ export default function AddOperator() {
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter the operator name"
         />
-        <Button>Add</Button>
+        <Button disabled={isDisabled}>Add</Button>
       </StyledAddForm>
     </>
   );

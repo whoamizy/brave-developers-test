@@ -41,7 +41,7 @@ export const GlobalContextProvider = ({
   const addNewOperator = (name: string) => {
     const newOperator: IOperator = {
       id: nanoid(),
-      name: name.trim(),
+      name: name.trim().toLowerCase(),
       imageUrl: NotFound,
     };
 

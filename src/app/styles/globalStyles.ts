@@ -9,7 +9,6 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    margin: 0;
     font-size: 16px;
     line-height: 1;
     background: #1A1B26;

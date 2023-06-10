@@ -11,16 +11,14 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import {
   StyledPayment,
-  StyledPaymentError,
   StyledPaymentForm,
-  StyledPaymentStatus,
-  StyledPaymentSuccess,
+  StyledPaymentMessage,
   StyledPaymentTip,
   StyledPaymentTop,
 } from "./styles";
 
 type TProps = {
-  id: string | number;
+  id: string;
 };
 
 const Page: NextPage<{ params: TProps }> = ({ params }) => {
@@ -28,19 +26,18 @@ const Page: NextPage<{ params: TProps }> = ({ params }) => {
   const router = useRouter();
   const { operatorsList } = useGlobalContext();
   const [number, setNumber] = useState("");
-  const [numberError, setNumberError] = useState(false);
   const [amount, setAmount] = useState("");
-  const [amountError, setAmountError] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [paymentResponse, setPaymentResponse] = useState<IResponse>({
-    fetched: false,
+    isFetched: false,
     isSuccess: false,
     message: ResponseMessage.Failure,
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoad, setIsLoad] = useState(false);
+  const [isPageLoad, setIsPageLoad] = useState(false);
 
   useEffect(() => {
-    setIsLoad(true);
+    setIsPageLoad(true);
   }, []);
 
   const operator = operatorsList.find((op) => op.id === id);
@@ -56,19 +53,6 @@ const Page: NextPage<{ params: TProps }> = ({ params }) => {
   const pay = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (number.replace(/[^\d]/g, "").length !== 11) {
-      setNumberError(true);
-      return;
-    } else {
-      setNumberError(false);
-    }
-    if (!amount.length) {
-      setAmountError(true);
-      return;
-    } else {
-      setAmountError(false);
-    }
-
     try {
       setIsLoading(true);
       await fetchPaymentResponse().then((data) => setPaymentResponse(data));
@@ -79,6 +63,18 @@ const Page: NextPage<{ params: TProps }> = ({ params }) => {
   };
 
   useEffect(() => {
+    if (
+      number.replace(/[^\d]/g, "").length !== 11 ||
+      +amount <= 0 ||
+      +amount > 1000
+    ) {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
+  }, [number, amount]);
+
+  useEffect(() => {
     if (paymentResponse.isSuccess) {
       setTimeout(() => {
         goHome();
@@ -87,35 +83,24 @@ const Page: NextPage<{ params: TProps }> = ({ params }) => {
   }, [paymentResponse.isSuccess]);
 
   return (
-    <StyledPayment $transitionStage={isLoad}>
+    <StyledPayment $transition={isPageLoad}>
       <Container>
         <StyledPaymentTop>
           <Button onClick={goBack}>Back</Button>
-          {paymentResponse.fetched && (
-            <StyledPaymentStatus>{paymentResponse.message}</StyledPaymentStatus>
+          {paymentResponse.isFetched && (
+            <StyledPaymentMessage>
+              {paymentResponse.message}
+            </StyledPaymentMessage>
           )}
         </StyledPaymentTop>
-        {paymentResponse.isSuccess && (
-          <StyledPaymentSuccess>
-            🎉 Successful! 🎉
-            <br />
-            In a couple of seconds it will take you to the home page
-          </StyledPaymentSuccess>
-        )}
         <StyledPaymentForm onSubmit={pay}>
           <OperatorsItem operator={operator!} />
-          {numberError && (
-            <StyledPaymentError>Incorrect number</StyledPaymentError>
-          )}
           <Input
             type="tel"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
             placeholder="+7(___)___-__-__"
           />
-          {amountError && (
-            <StyledPaymentError>Required field</StyledPaymentError>
-          )}
           <Input
             type="number"
             value={amount}
@@ -125,7 +110,9 @@ const Page: NextPage<{ params: TProps }> = ({ params }) => {
             max="1000"
           />
           <StyledPaymentTip>min 1, max 1000</StyledPaymentTip>
-          <Button disabled={isLoading}>{isLoading ? "Loading" : "Pay"}</Button>
+          <Button disabled={isDisabled || isLoading}>
+            {isLoading ? "Loading" : "Pay"}
+          </Button>
         </StyledPaymentForm>
       </Container>
     </StyledPayment>

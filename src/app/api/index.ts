@@ -1,18 +1,18 @@
 import { IResponse, ResponseMessage } from "../types/ResponseType";
-import { getRandom } from "../utils/getRandom";
+import { getRandomBool } from "../utils/getRandomBool";
 
 export const fetchPaymentResponse = () => {
   const response = new Promise<IResponse>((resolve) => {
     setTimeout(() => {
-      if (getRandom()) {
+      if (getRandomBool()) {
         resolve({
-          fetched: true,
+          isFetched: true,
           isSuccess: true,
           message: ResponseMessage.Success,
         });
       } else {
         resolve({
-          fetched: true,
+          isFetched: true,
           isSuccess: false,
           message: ResponseMessage.Failure,
         });

@@ -4,7 +4,7 @@ export enum ResponseMessage {
 }
 
 export type IResponse = {
-  fetched: boolean;
+  isFetched: boolean;
   isSuccess: boolean;
   message: ResponseMessage;
 };

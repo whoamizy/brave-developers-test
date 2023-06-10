@@ -19,9 +19,9 @@ export default function Input({
   min,
   max,
 }: IProps) {
-  function pickInput() {
-    if (type === "tel") {
-      return (
+  return (
+    <StyledInputWrapper>
+      {type === "tel" ? (
         <InputMask
           type={type}
           value={value}
@@ -29,9 +29,7 @@ export default function Input({
           mask="+7(999)999-99-99"
           placeholder={placeholder}
         />
-      );
-    } else {
-      return (
+      ) : (
         <input
           type={type}
           value={value}
@@ -40,8 +38,7 @@ export default function Input({
           min={min}
           max={max}
         />
-      );
-    }
-  }
-  return <StyledInputWrapper>{pickInput()}</StyledInputWrapper>;
+      )}
+    </StyledInputWrapper>
+  );
 }
